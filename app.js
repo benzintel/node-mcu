@@ -40,7 +40,7 @@ client.on('connect', function() { // When connected
 				createAt: new Date().toLocaleString(),
 				timestamp: now
 			});
-      console.log("Received '" + message + "' on '" + topic + "'");
+      // console.log("Received '" + message + "' on '" + topic + "'");
     });
   });
 });
