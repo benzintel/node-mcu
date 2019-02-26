@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "express": "^4.16.4",
     "firebase-admin": "^7.0.0",
     "mqtt": "^2.18.8"
   },

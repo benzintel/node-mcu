@@ -1,6 +1,10 @@
+const express = require('express');
+const app = express();
+const port = 3000;
+
 // Create a MQTT Client
 const mqtt = require('mqtt');
-
+// Firebase init
 const admin = require("firebase-admin");
 // Fetch the service account key JSON file contents
 let serviceAccount = require("./config/serviceAccountKey.json");
@@ -39,3 +43,5 @@ client.on('connect', function() { // When connected
     });
   });
 });
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
