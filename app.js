@@ -37,7 +37,7 @@ client.on('connect', function() { // When connected
         let usersRef = db.ref("temperature").child(now);
         usersRef.set({
           topic: topic,
-          temp: parseFloat(message),
+          temp: message,
           createAt: new Date().toLocaleString(),
           timestamp: now
         });
