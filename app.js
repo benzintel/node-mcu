@@ -32,15 +32,39 @@ client.on('connect', function() { // When connected
   client.subscribe('/ESP/TEMP', function() {
     // when a message arrives, do something with it
     client.on('message', function(topic, message, packet) {
-    	let now = new Date().valueOf();
-    	let usersRef = ref.child(now);
-			usersRef.set({
-				topic: topic,
-				temp: parseFloat(message),
-				createAt: new Date().toLocaleString(),
-				timestamp: now
-			});
-      // console.log("Received '" + message + "' on '" + topic + "'");
+      let now = new Date().valueOf();
+      let usersRef = db.ref("temperature").child(now);
+      usersRef.set({
+        topic: topic,
+        temp: parseFloat(message),
+        createAt: new Date().toLocaleString(),
+        timestamp: now
+      });
+      console.log("Received '" + message + "' on '" + topic + "'");
+    });
+  });
+
+  client.subscribe('/ESP/RELAY', function() {
+    // when a message arrives, do something with it
+    client.on('message', function(topic, message, packet) {
+      let now = new Date().valueOf();
+      if (message.indexOf('1_') > -1) {
+        if (message == '1_ON') {
+          let usersRef = db.ref("relay").update({ 1: true });
+        } else {
+          let usersRef = db.ref("relay").update({ 1: false });
+        }
+      }
+
+      if (message.indexOf('2_') > -1) {
+        if (message == '2_ON') {
+          let usersRef = db.ref("relay").update({ 2: true });
+        } else {
+          let usersRef = db.ref("relay").update({ 2: false });
+        }
+      }
+
+      console.log("Received '" + message + "' on '" + topic + "'");
     });
   });
 });
