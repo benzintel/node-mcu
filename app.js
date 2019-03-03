@@ -32,15 +32,16 @@ client.on('connect', function() { // When connected
   client.subscribe('/ESP/TEMP', function() {
     // when a message arrives, do something with it
     client.on('message', function(topic, message, packet) {
-      let now = new Date().valueOf();
-      let usersRef = db.ref("temperature").child(now);
-      usersRef.set({
-        topic: topic,
-        temp: parseFloat(message),
-        createAt: new Date().toLocaleString(),
-        timestamp: now
-      });
-      console.log("Received '" + message + "' on '" + topic + "'");
+      if (parseFloat(message) == 999999) {
+        let now = new Date().valueOf();
+        let usersRef = db.ref("temperature").child(now);
+        usersRef.set({
+          topic: topic,
+          temp: parseFloat(message),
+          createAt: new Date().toLocaleString(),
+          timestamp: now
+        });
+      }
     });
   });
 
@@ -63,8 +64,6 @@ client.on('connect', function() { // When connected
           let usersRef = db.ref("relay").update({ 2: false });
         }
       }
-
-      console.log("Received '" + message + "' on '" + topic + "'");
     });
   });
 });
