@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
+const _ = require('lodash');
+
 
 // Create a MQTT Client
 const mqtt = require('mqtt');
@@ -30,44 +32,44 @@ client.on('connect', function() { // When connected
     console.log("Connected to CloudMQTT");
   // Subscribe to the temperature
   client.subscribe('/ESP/TEMP', function() {
-    // when a message arrives, do something with it
-    client.on('message', function(topic, message, packet) {
-      if (message != 999999) {
-        let now = new Date().valueOf();
-        let usersRef = db.ref("temperature").child(now);
-        usersRef.set({
-          topic: topic,
-          temp: message,
-          createAt: new Date().toLocaleString(),
-          timestamp: now
-        });
-
-        console.log("Received '" + message + "' on '" + topic + "'");
-      }
-    });
   });
 
   client.subscribe('/ESP/RELAY', function() {
     // when a message arrives, do something with it
     client.on('message', function(topic, message, packet) {
-      let now = new Date().valueOf();
-      if (message.indexOf('1_') > -1) {
-        if (message == '1_ON') {
-          let usersRef = db.ref("relay").update({ 1: true });
-        } else {
-          let usersRef = db.ref("relay").update({ 1: false });
+      if (topic == '/ESP/RELAY') {
+        let now = new Date().valueOf();
+        if (message.indexOf('1_') > -1) {
+          if (message == '1_ON') {
+            let usersRef = db.ref("relay").update({ 1: true });
+          } else {
+            let usersRef = db.ref("relay").update({ 1: false });
+          }
+        }
+
+        if (message.indexOf('2_') > -1) {
+          if (message == '2_ON') {
+            let usersRef = db.ref("relay").update({ 2: true });
+          } else {
+            let usersRef = db.ref("relay").update({ 2: false });
+          }
         }
       }
 
-      if (message.indexOf('2_') > -1) {
-        if (message == '2_ON') {
-          let usersRef = db.ref("relay").update({ 2: true });
-        } else {
-          let usersRef = db.ref("relay").update({ 2: false });
-        }
+      if (topic == '/ESP/TEMP') {
+        let now = new Date().valueOf();
+        let usersRef = db.ref("temperature").child(now);
+        usersRef.set({
+          topic: topic,
+          temp:  parseFloat(message),
+          createAt: new Date().toLocaleString(),
+          timestamp: now
+        });
       }
 
-       console.log("Received '" + message + "' on '" + topic + "'");
+      console.log("Received '" + message + "' on '" + topic + "'");
+
+
     });
   });
 });
