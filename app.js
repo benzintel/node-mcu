@@ -41,6 +41,8 @@ client.on('connect', function() { // When connected
           createAt: new Date().toLocaleString(),
           timestamp: now
         });
+
+        console.log("Received '" + message + "' on '" + topic + "'");
       }
     });
   });
@@ -64,6 +66,8 @@ client.on('connect', function() { // When connected
           let usersRef = db.ref("relay").update({ 2: false });
         }
       }
+
+       console.log("Received '" + message + "' on '" + topic + "'");
     });
   });
 });
