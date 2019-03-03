@@ -64,7 +64,7 @@ client.on('connect', function() { // When connected
           temp:  parseFloat(message),
           createAt: new Date().toLocaleString('en-US', {
             timeZone: 'Asia/Bangkok'
-          });,
+          }),
           timestamp: now
         });
       }
