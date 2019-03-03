@@ -62,7 +62,9 @@ client.on('connect', function() { // When connected
         usersRef.set({
           topic: topic,
           temp:  parseFloat(message),
-          createAt: new Date().toLocaleString(),
+          createAt: new Date().toLocaleString('en-US', {
+            timeZone: 'Asia/Bangkok'
+          });,
           timestamp: now
         });
       }
