@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;;
+const port = 3001;
 
 // Create a MQTT Client
 const mqtt = require('mqtt');
@@ -32,7 +32,7 @@ client.on('connect', function() { // When connected
   client.subscribe('/ESP/TEMP', function() {
     // when a message arrives, do something with it
     client.on('message', function(topic, message, packet) {
-      if (parseFloat(message) == 999999) {
+      if (message != 999999) {
         let now = new Date().valueOf();
         let usersRef = db.ref("temperature").child(now);
         usersRef.set({
