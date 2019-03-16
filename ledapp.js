@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 
 // STATUS LED
-let status = [false, false];
+let status = [];
 // TOPIC
 const LED_TOPIC = `/ESP/LED`;
 
@@ -35,16 +35,20 @@ client.on('connect', function() {
           messageFromBuffer = message.toString('utf8');
           if (messageFromBuffer != 'GET') {
             const splitStatus = messageFromBuffer.split(',');
-            splitStatus.map((ele, index)=> {
-              if (ele == 0) {
-                status[index] = false;
-              } else {
-                status[index] = true;
-              }
-            });
+            if (splitStatus.length > 0) {
+              splitStatus.map((ele, index)=> {
+                if (parseInt(ele)) {
+                  if (ele == 0) {
+                    status[index] = false;
+                  } else {
+                    status[index] = true;
+                  }
+                }
+              });
+            }
           }
 
-          // console.log(`Received '${message}' on '${topic}`);
+          console.log(`Received '${message}' on '${topic}`);
         break;
         default:
           console.log(`Unknow Topic group`);
