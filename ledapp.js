@@ -1,4 +1,5 @@
 require('dotenv').config();
+const request = require('request');
 const express = require('express');
 const port = process.env.PORT || 3001;
 const _ = require('lodash');
