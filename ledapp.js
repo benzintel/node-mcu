@@ -89,8 +89,6 @@ app.post('/webhook', async (req, res) => {
 
   if (message == 'สถานะทั้งหมด') {
     checkStatus();
-  } else {
-    checkStatus();
   }
 
   const body = JSON.stringify({
@@ -117,11 +115,12 @@ app.post('/webhook', async (req, res) => {
 
 let mqttMessage = async (topic, message) => {
   client.publish(topic, message);
+  checkStatus();
 }
 
 let checkStatus = async () => {
   mqttMessage(LED_TOPIC, 'GET');
-  await new Promise(done => setTimeout(done, 2000));
+  await new Promise(done => setTimeout(done, 3000));
 }
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
