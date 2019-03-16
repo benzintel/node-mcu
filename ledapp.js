@@ -114,11 +114,11 @@ app.post('/webhook', async (req, res) => {
   res.sendStatus(200);
 });
 
-let mqttMessage = (topic, message) => {
+let mqttMessage = async (topic, message) => {
   client.publish(topic, message);
 }
 
-let checkStatus = () => {
+let checkStatus = async () => {
   mqttMessage(LED_TOPIC, 'GET');
   await new Promise(done => setTimeout(done, 2000));
 }
