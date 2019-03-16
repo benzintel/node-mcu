@@ -113,7 +113,7 @@ app.post('/webhook', async (req, res) => {
 
 let mqttMessage = async (topic, message) => {
   client.publish(topic, message);
-  checkStatus();
+  await checkStatus();
 }
 
 let checkStatus = async () => {
