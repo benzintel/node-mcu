@@ -37,13 +37,11 @@ client.on('connect', function() {
             const splitStatus = messageFromBuffer.split(',');
             if (splitStatus.length > 0) {
               splitStatus.map((ele, index)=> {
-                console.log(`DOIT ${ele}`);
-                if (parseInt(ele)) {
-                  if (ele == 0) {
-                    status[index] = false;
-                  } else {
-                    status[index] = true;
-                  }
+                console.log(`DOIT ${ele} ${index} ${parseInt(ele)}`);
+                if (ele == 0) {
+                  status[index] = false;
+                } else {
+                  status[index] = true;
                 }
               });
             }
