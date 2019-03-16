@@ -79,6 +79,7 @@ app.post('/webhook', async (req, res) => {
     }
   }
 
+  mqttMessage(LED_TOPIC, 'GET');
   if (message == 'สถานะทั้งหมด') {
     await checkStatus();
   }
@@ -91,8 +92,6 @@ app.post('/webhook', async (req, res) => {
       objectMessage
     ]
   });
-
-  console.log(body);
 
   request({
     method: `POST`,
@@ -110,7 +109,6 @@ let mqttMessage = async (topic, message) => {
 }
 
 let checkStatus = async () => {
-  mqttMessage(LED_TOPIC, 'GET');
   await new Promise(done => setTimeout(done, 3000));
 }
 
