@@ -28,8 +28,9 @@ const client = mqtt.connect('mqtt://m16.cloudmqtt.com', {
   port: 16876
 });
 
-client.on('connect', function() { // When connected
-    console.log("Connected to CloudMQTT");
+client.on('connect', function() { 
+  // When connected
+  console.log("Connected to CloudMQTT");
   // Subscribe to the temperature
   client.subscribe('/ESP/TEMP', function() {
   });
