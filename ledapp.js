@@ -57,7 +57,7 @@ client.on('connect', function() {
 app.get('/', async (req, res) => {
   mqttMessage(LED_TOPIC, 'GET');
   await new Promise(done => setTimeout(done, 2000));
-  console.log(status);
+  console.log(genFlexMessage(status[0], status[1]));
   res.sendStatus(200);
 });
 
@@ -91,15 +91,16 @@ app.post('/webhook', async (req, res) => {
     await checkStatus();
   }
 
+  const objectMessage = genFlexMessage(status[0], status[1]);
+
   const body = JSON.stringify({
     replyToken: reply_token,
     messages: [
-      {
-        type: `text`,
-        text: `อุณภูมิ ${status[0]} ${status[1]}`
-      }
+      objectMessage
     ]
   });
+
+  console.log(body);
 
   request({
     method: `POST`,
@@ -119,6 +120,117 @@ let mqttMessage = async (topic, message) => {
 let checkStatus = async () => {
   mqttMessage(LED_TOPIC, 'GET');
   await new Promise(done => setTimeout(done, 3000));
+}
+
+let genFlexMessage = (ledOne, ledTwo) => {
+  return {
+    "type": "flex",
+    "altText": "สถานะระบบไฟ",
+    "contents": {
+      "type": "bubble",
+      "hero": {
+        "type": "image",
+        "url": "https://www.ihome108.com/wp-content/uploads/2017/05/home-slide-01.jpg",
+        "size": "full",
+        "aspectRatio": "20:13",
+        "aspectMode": "cover",
+        "action": {
+          "type": "uri",
+          "label": "Line",
+          "uri": "https://linecorp.com/"
+        }
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ระบบไฟ",
+            "flex": 0,
+            "size": "xl",
+            "weight": "bold"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "flex": 1,
+            "margin": "md",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ไฟหน้าบ้าน",
+                "align": "start",
+                "gravity": "top",
+                "weight": "bold"
+              },
+              {
+                "type": "text",
+                "text": (ledOne == true) ? "Open" : "Close",
+                "align": "start",
+                "weight": "bold",
+                "color": (ledOne == true) ? "#FF0000" : "#000000",
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "flex": 1,
+            "margin": "md",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ไฟหลังบ้าน",
+                "align": "start",
+                "gravity": "top",
+                "weight": "bold"
+              },
+              {
+                "type": "text",
+                "text": (ledTwo == true) ? "Open" : "Close",
+                "align": "start",
+                "weight": "bold",
+                "color": (ledTwo == true) ? "#FF0000" : "#000000",
+              }
+            ]
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "flex": 0,
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": `${(ledOne == true) ? "ปิดไฟ" : "เปิดไฟ"}หน้าบ้าน`,
+              "text": `${(ledOne == true) ? "ปิดไฟ" : "เปิดไฟ"} หน้าบ้าน`
+            },
+            "height": "sm",
+            "style": "link"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": `${(ledTwo == true) ? "ปิดไฟ" : "เปิดไฟ"}หลังบ้าน`,
+              "text": `${(ledTwo == true) ? "ปิดไฟ" : "เปิดไฟ"} หลังบ้าน`
+            },
+            "height": "sm",
+            "style": "link"
+          },
+          {
+            "type": "spacer",
+            "size": "sm"
+          }
+        ]
+      }
+    }
+  };
 }
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
