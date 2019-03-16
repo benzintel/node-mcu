@@ -73,22 +73,22 @@ app.post('/webhook', async (req, res) => {
 
   if (message == 'เปิดไฟ หน้าบ้าน' || message == 'ปิดไฟ หน้าบ้าน') {
     if (message == 'เปิดไฟ หน้าบ้าน') {
-      mqttMessage(LED_TOPIC, 'LEDON_ONE');
+      await mqttMessage(LED_TOPIC, 'LEDON_ONE');
     } else {
-      mqttMessage(LED_TOPIC, 'LEDOFF_ONE');
+      await mqttMessage(LED_TOPIC, 'LEDOFF_ONE');
     }
   }
 
   if (message == 'เปิดไฟ หลังบ้าน' || message == 'ปิดไฟ หลังบ้าน') {
     if (message == 'เปิดไฟ หลังบ้าน') {
-      mqttMessage(LED_TOPIC, 'LEDON_TWO');
+      await mqttMessage(LED_TOPIC, 'LEDON_TWO');
     } else {
-      mqttMessage(LED_TOPIC, 'LEDOFF_TWO');
+      await mqttMessage(LED_TOPIC, 'LEDOFF_TWO');
     }
   }
 
   if (message == 'สถานะทั้งหมด') {
-    checkStatus();
+    await checkStatus();
   }
 
   const body = JSON.stringify({
@@ -100,8 +100,6 @@ app.post('/webhook', async (req, res) => {
       }
     ]
   });
-
-  console.log(body);
 
   request({
     method: `POST`,
