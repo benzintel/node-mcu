@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 
 // STATUS LED
-let status = [];
+let status = [false, false];
 // TOPIC
 const LED_TOPIC = `/ESP/LED`;
 
@@ -90,7 +90,7 @@ app.post('/webhook', async (req, res) => {
   } else {
     await checkStatus();
   }
-  
+
   console.log(status);
   const objectMessage = genFlexMessage(status[0], status[1]);
 
