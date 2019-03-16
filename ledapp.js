@@ -83,7 +83,7 @@ app.post('/webhook', async (req, res) => {
   if (message == 'สถานะทั้งหมด') {
     await checkStatus();
   }
-
+  console.log(status);
   const objectMessage = genFlexMessage(status[0], status[1]);
 
   const body = JSON.stringify({
