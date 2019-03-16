@@ -53,14 +53,6 @@ client.on('connect', function() {
   });
 });
 
-
-app.get('/', async (req, res) => {
-  mqttMessage(LED_TOPIC, 'GET');
-  await new Promise(done => setTimeout(done, 2000));
-  console.log(genFlexMessage(status[0], status[1]));
-  res.sendStatus(200);
-});
-
 app.post('/webhook', async (req, res) => {
 
   const message = req.body.events[0].message.text;
